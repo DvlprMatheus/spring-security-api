@@ -40,7 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.debug("Extracted username from JWT token: {}", username);
             } catch (Exception e) {
                 log.warn("Invalid JWT token: {}", e.getMessage());
-                // Token inválido, continuar sem autenticação
             }
         }
         

@@ -71,17 +71,14 @@ class AuthenticationServiceTest {
     
     @Test
     void register_ShouldReturnAuthResponse_WhenUserIsCreatedSuccessfully() {
-        // Arrange
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(jwtUtil.generateToken(any(User.class))).thenReturn("jwt-token");
         
-        // Act
         AuthResponse response = authenticationService.register(registerRequest);
         
-        // Assert
         assertNotNull(response);
         assertEquals("jwt-token", response.getToken());
         assertEquals("Bearer", response.getType());
@@ -96,10 +93,8 @@ class AuthenticationServiceTest {
     
     @Test
     void register_ShouldThrowUsernameAlreadyExistsException_WhenUsernameExists() {
-        // Arrange
         when(userRepository.existsByUsername(anyString())).thenReturn(true);
         
-        // Act & Assert
         assertThrows(UsernameAlreadyExistsException.class, () -> {
             authenticationService.register(registerRequest);
         });
@@ -111,11 +106,9 @@ class AuthenticationServiceTest {
     
     @Test
     void register_ShouldThrowEmailAlreadyExistsException_WhenEmailExists() {
-        // Arrange
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
         
-        // Act & Assert
         assertThrows(EmailAlreadyExistsException.class, () -> {
             authenticationService.register(registerRequest);
         });
@@ -127,17 +120,14 @@ class AuthenticationServiceTest {
     
     @Test
     void login_ShouldReturnAuthResponse_WhenCredentialsAreValid() {
-        // Arrange
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(user);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(authentication);
         when(jwtUtil.generateToken(any(User.class))).thenReturn("jwt-token");
         
-        // Act
         AuthResponse response = authenticationService.login(loginRequest);
         
-        // Assert
         assertNotNull(response);
         assertEquals("jwt-token", response.getToken());
         assertEquals("Bearer", response.getType());
@@ -149,11 +139,9 @@ class AuthenticationServiceTest {
     
     @Test
     void login_ShouldThrowAuthenticationFailedException_WhenCredentialsAreInvalid() {
-        // Arrange
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new BadCredentialsException("Bad credentials"));
         
-        // Act & Assert
         assertThrows(AuthenticationFailedException.class, () -> {
             authenticationService.login(loginRequest);
         });
@@ -164,11 +152,9 @@ class AuthenticationServiceTest {
     
     @Test
     void login_ShouldThrowAuthenticationFailedException_WhenAuthenticationFails() {
-        // Arrange
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new AuthenticationException("Authentication failed") {});
         
-        // Act & Assert
         assertThrows(AuthenticationFailedException.class, () -> {
             authenticationService.login(loginRequest);
         });

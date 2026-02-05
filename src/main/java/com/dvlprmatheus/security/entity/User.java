@@ -82,11 +82,6 @@ public class User extends AbstractEntity implements UserDetails {
         return true;
     }
     
-    /**
-     * Obtém o usuário atual autenticado do contexto do Spring Security.
-     * 
-     * @return Optional contendo o User atual, ou Optional.empty() se não houver usuário autenticado
-     */
     public static Optional<User> currentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

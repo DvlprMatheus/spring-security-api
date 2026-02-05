@@ -61,7 +61,6 @@ class AuthenticationControllerTest {
     
     @Test
     void register_ShouldReturnCreated_WhenRequestIsValid() throws Exception {
-        // Arrange
         RegisterRequest request = RegisterRequest.builder()
                 .username("testuser")
                 .email("test@example.com")
@@ -76,7 +75,6 @@ class AuthenticationControllerTest {
         
         when(authenticationService.register(any(RegisterRequest.class))).thenReturn(response);
         
-        // Act & Assert
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -88,14 +86,12 @@ class AuthenticationControllerTest {
     
     @Test
     void register_ShouldReturnBadRequest_WhenValidationFails() throws Exception {
-        // Arrange
         RegisterRequest request = RegisterRequest.builder()
-                .username("") // Inválido
-                .email("invalid-email") // Inválido
-                .password("123") // Muito curto
+                .username("")
+                .email("invalid-email")
+                .password("123")
                 .build();
         
-        // Act & Assert
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -104,7 +100,6 @@ class AuthenticationControllerTest {
     
     @Test
     void register_ShouldReturnConflict_WhenUsernameExists() throws Exception {
-        // Arrange
         RegisterRequest request = RegisterRequest.builder()
                 .username("existinguser")
                 .email("test@example.com")
@@ -114,7 +109,6 @@ class AuthenticationControllerTest {
         when(authenticationService.register(any(RegisterRequest.class)))
                 .thenThrow(new UsernameAlreadyExistsException("existinguser"));
         
-        // Act & Assert
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -124,7 +118,6 @@ class AuthenticationControllerTest {
     
     @Test
     void register_ShouldReturnConflict_WhenEmailExists() throws Exception {
-        // Arrange
         RegisterRequest request = RegisterRequest.builder()
                 .username("testuser")
                 .email("existing@example.com")
@@ -134,7 +127,6 @@ class AuthenticationControllerTest {
         when(authenticationService.register(any(RegisterRequest.class)))
                 .thenThrow(new EmailAlreadyExistsException("existing@example.com"));
         
-        // Act & Assert
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -144,7 +136,6 @@ class AuthenticationControllerTest {
     
     @Test
     void login_ShouldReturnOk_WhenCredentialsAreValid() throws Exception {
-        // Arrange
         LoginRequest request = LoginRequest.builder()
                 .username("testuser")
                 .password("password123")
@@ -158,7 +149,6 @@ class AuthenticationControllerTest {
         
         when(authenticationService.login(any(LoginRequest.class))).thenReturn(response);
         
-        // Act & Assert
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -170,13 +160,11 @@ class AuthenticationControllerTest {
     
     @Test
     void login_ShouldReturnBadRequest_WhenValidationFails() throws Exception {
-        // Arrange
         LoginRequest request = LoginRequest.builder()
-                .username("") // Inválido
-                .password("") // Inválido
+                .username("")
+                .password("")
                 .build();
         
-        // Act & Assert
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -185,7 +173,6 @@ class AuthenticationControllerTest {
     
     @Test
     void login_ShouldReturnUnauthorized_WhenCredentialsAreInvalid() throws Exception {
-        // Arrange
         LoginRequest request = LoginRequest.builder()
                 .username("testuser")
                 .password("wrongpassword")
@@ -194,7 +181,6 @@ class AuthenticationControllerTest {
         when(authenticationService.login(any(LoginRequest.class)))
                 .thenThrow(new com.dvlprmatheus.security.api.exception.AuthenticationFailedException("Invalid credentials"));
         
-        // Act & Assert
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

@@ -34,19 +34,16 @@ public class AuthenticationService {
     public AuthResponse register(RegisterRequest request) {
         log.info("Attempting to register new user with username: {}", request.getUsername());
         
-        // Verificar se username já existe
         if (userRepository.existsByUsername(request.getUsername())) {
             log.warn("Registration failed: username already exists - {}", request.getUsername());
             throw new UsernameAlreadyExistsException(request.getUsername());
         }
         
-        // Verificar se email já existe
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn("Registration failed: email already exists - {}", request.getEmail());
             throw new EmailAlreadyExistsException(request.getEmail());
         }
         
-        // Criar novo usuário
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -56,7 +53,6 @@ public class AuthenticationService {
         user = userRepository.save(user);
         log.debug("User created successfully with ID: {}", user.getId());
         
-        // Gerar token JWT
         String token = jwtUtil.generateToken(user);
         log.info("User registered successfully: {}", request.getUsername());
         
@@ -70,7 +66,6 @@ public class AuthenticationService {
     public AuthResponse login(LoginRequest request) {
         log.info("Attempting to login user: {}", request.getUsername());
         try {
-            // Autenticar usuário
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(),
@@ -78,11 +73,9 @@ public class AuthenticationService {
                     )
             );
             
-            // Obter usuário autenticado
             User user = (User) authentication.getPrincipal();
             log.debug("User authenticated successfully: {}", user.getUsername());
             
-            // Gerar token JWT
             String token = jwtUtil.generateToken(user);
             log.info("Login successful for user: {}", request.getUsername());
             

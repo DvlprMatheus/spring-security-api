@@ -38,7 +38,6 @@ class UserControllerTest {
     
     @Test
     void test_ShouldReturnOkWithUserInfo_WhenUserIsAuthenticated() throws Exception {
-        // Arrange
         User user = User.builder()
                 .username("testuser")
                 .email("test@example.com")
@@ -51,7 +50,6 @@ class UserControllerTest {
         securityContext.setAuthentication(authentication);
         SecurityContextHolder.setContext(securityContext);
         
-        // Act & Assert
         mockMvc.perform(get("/v1/user/test"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Authentication working correctly!"))
@@ -60,9 +58,6 @@ class UserControllerTest {
     
     @Test
     void test_ShouldReturnOkWithUnauthenticatedMessage_WhenUserIsNotAuthenticated() throws Exception {
-        // Arrange - SecurityContext já está limpo pelo @BeforeEach
-        
-        // Act & Assert
         mockMvc.perform(get("/v1/user/test"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("User not authenticated"))
