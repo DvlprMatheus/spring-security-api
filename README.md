@@ -20,7 +20,7 @@ Fornecer uma base sólida e pronta para uso com:
 ### Stack Principal
 
 - **Java 21** - Linguagem de programação
-- **Spring Boot 4.0.1** - Framework principal
+- **Spring Boot 4.0.2** - Framework principal
 - **Spring Security** - Framework de segurança
 - **Spring Data JPA** - Abstração de acesso a dados
 - **Hibernate** - ORM (Object-Relational Mapping)
