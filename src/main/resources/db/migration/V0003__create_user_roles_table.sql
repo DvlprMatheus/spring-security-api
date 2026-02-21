@@ -1,4 +1,8 @@
--- Criar tabela user_roles (join table)
+-- Migration V0003: Criar tabela de relacionamento usuário-role
+-- Descrição: Cria a tabela de relacionamento usuário-role com os campos user_id e role_id
+-- Autor: Matheus Cruz
+
+-- CREATE
 CREATE TABLE IF NOT EXISTS user_roles (
     user_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL,
@@ -13,7 +17,11 @@ CREATE TABLE IF NOT EXISTS user_roles (
         ON UPDATE CASCADE
 );
 
--- Criar índices para melhor performance em consultas
+-- INDEX
 CREATE INDEX IF NOT EXISTS idx_user_roles_user_id ON user_roles(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_roles_role_id ON user_roles(role_id);
 
+-- COMMENT
+COMMENT ON TABLE user_roles IS 'Tabela de relacionamento usuário-role';
+COMMENT ON COLUMN user_roles.user_id IS 'ID do usuário';
+COMMENT ON COLUMN user_roles.role_id IS 'ID da role';
