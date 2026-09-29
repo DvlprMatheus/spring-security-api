@@ -13,19 +13,21 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    
-    private final UserRepository userRepository;
-    
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.debug("Loading user by username: {}", username);
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> {
-                    log.warn("User not found: {}", username);
-                    return new UsernameNotFoundException("User not found: " + username);
-                });
-        log.debug("User loaded successfully: {}", username);
-        return user;
-    }
-}
 
+  private final UserRepository userRepository;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    log.debug("Loading user by username: {}", username);
+    User user =
+        userRepository
+            .findByUsername(username)
+            .orElseThrow(
+                () -> {
+                  log.warn("User not found: {}", username);
+                  return new UsernameNotFoundException("User not found: " + username);
+                });
+    log.debug("User loaded successfully: {}", username);
+    return user;
+  }
+}

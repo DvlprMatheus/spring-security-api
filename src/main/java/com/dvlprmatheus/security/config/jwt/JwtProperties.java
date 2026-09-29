@@ -9,11 +9,10 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class JwtProperties {
-    
-    @Value("${jwt.secret}")
-    private String secret;
-    
-    @Value("${jwt.expiration:86400000}")
-    private Long expiration;
-}
 
+  @Value("${jwt.secret}")
+  private String secret;
+
+  @Value("${jwt.expiration:86400000}")
+  private Long expiration;
+}

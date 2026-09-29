@@ -1,15 +1,12 @@
 {
     "configurations": [
-    {
-        "name": "Spring Boot: Run Application",
-        "type": "java",
-        "request": "launch",
-        "mainClass": "com.dvlprmatheus.security.SecurityApplication",
-        "projectName": "spring-security-api",
-        "args": [],
-        "env": {
-            "SPRING_PROFILES_ACTIVE": "dev"
+        {
+            "name": "Spring Boot: Run Application",
+            "type": "java",
+            "request": "launch",
+            "mainClass": "com.dvlprmatheus.security.SecurityApplication",
+            "projectName": "spring-security-api",
+            "envFile": "${workspaceFolder}/.env"
         }
-    }
     ]
 }

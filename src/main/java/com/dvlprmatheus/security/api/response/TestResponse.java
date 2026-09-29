@@ -12,8 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestResponse {
-    
-    private String message;
-    private String username;
-}
 
+  private String message;
+  private String username;
+}
