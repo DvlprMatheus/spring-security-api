@@ -72,7 +72,7 @@ public class AuthenticationService {
                             request.getPassword()
                     )
             );
-            
+
             User user = (User) authentication.getPrincipal();
             log.debug("User authenticated successfully: {}", user.getUsername());
             

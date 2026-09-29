@@ -1,10 +1,10 @@
 -- Migration V0001: Criar tabela de roles
 -- Descrição: Cria a tabela de roles com os campos name, description, created_at e updated_at
--- Autor: Matheus Cruz
+-- Autor: DvlprMatheus
 
 -- CREATE
 CREATE TABLE IF NOT EXISTS roles (
-    id BIGSERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     description VARCHAR(255),
     created_at TIMESTAMP,

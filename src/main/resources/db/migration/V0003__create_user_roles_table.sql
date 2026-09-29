@@ -1,11 +1,11 @@
 -- Migration V0003: Criar tabela de relacionamento usuário-role
 -- Descrição: Cria a tabela de relacionamento usuário-role com os campos user_id e role_id
--- Autor: Matheus Cruz
+-- Autor: DvlprMatheus
 
 -- CREATE
 CREATE TABLE IF NOT EXISTS user_roles (
-    user_id BIGINT NOT NULL,
-    role_id BIGINT NOT NULL,
+    user_id UUID NOT NULL,
+    role_id UUID NOT NULL,
     PRIMARY KEY (user_id, role_id),
     CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) 
         REFERENCES users(id) 
