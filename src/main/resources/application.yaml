@@ -2,7 +2,7 @@ spring:
   application:
     name: security
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOSTNAME:db}:5432/${POSTGRES_DB:spring-security-db}
+    url: ${POSTGRES_URL:jdbc:postgresql://postgres:5432/spring-security-db}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
@@ -14,12 +14,11 @@ spring:
     show-sql: true
   flyway:
     enabled: true
-    url: jdbc:postgresql://${POSTGRES_HOSTNAME:db}:5432/${POSTGRES_DB:spring-security-db}
+    url: ${POSTGRES_URL:jdbc:postgresql://postgres:5432/spring-security-db}
     user: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     locations: classpath:db/migration
     baseline-on-migrate: true
-    out-of-order: true
     validate-on-migrate: true
 jwt:
   expiration: 86400000

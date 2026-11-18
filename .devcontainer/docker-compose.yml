@@ -4,23 +4,23 @@ volumes:
 services:
   app:
     container_name: spring-security-app
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     environment:
         POSTGRES_PASSWORD: postgres
         POSTGRES_USER: postgres
         POSTGRES_DB: spring-security-db
-        POSTGRES_HOSTNAME: db
+        POSTGRES_HOSTNAME: postgres
     volumes:
-      - ../..:/workspaces:cached      
+      - ../..:/workspaces:cached
     command: sleep infinity
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
     networks:
       - app-network
-  db:
+  postgres:
     container_name: spring-security-db
     image: postgres:16-alpine
     restart: unless-stopped
