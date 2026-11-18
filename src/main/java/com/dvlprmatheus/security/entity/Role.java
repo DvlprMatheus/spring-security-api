@@ -1,6 +1,9 @@
 package com.dvlprmatheus.security.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;

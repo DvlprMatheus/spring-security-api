@@ -20,7 +20,6 @@ spotless {
 		target 'src/**/*.java'
 		importOrder()
 		removeUnusedImports()
-		expandWildcardImports()
 		googleJavaFormat()
 		formatAnnotations()
 	}

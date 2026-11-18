@@ -1,4 +1,6 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    // Remove this line if you are using a JDK installed in your own PC
+    "java.import.gradle.java.home": "/usr/lib/jvm/msopenjdk-current"
 }

@@ -1,6 +1,12 @@
 package com.dvlprmatheus.security.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import com.dvlprmatheus.security.config.jwt.JwtProperties;
@@ -25,7 +31,7 @@ class JwtUtilTest {
   void setUp() {
     when(jwtProperties.getSecret())
         .thenReturn("a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2");
-    when(jwtProperties.getExpiration()).thenReturn(86400000L);
+    lenient().when(jwtProperties.getExpiration()).thenReturn(86400000L);
 
     jwtUtil = new JwtUtil(jwtProperties);
 
@@ -48,7 +54,6 @@ class JwtUtilTest {
   @Test
   void extractUsername_ShouldReturnCorrectUsername_WhenTokenIsValid() {
     String token = jwtUtil.generateToken(user);
-
     String username = jwtUtil.extractUsername(token);
 
     assertEquals("testuser", username);
@@ -57,7 +62,6 @@ class JwtUtilTest {
   @Test
   void extractExpiration_ShouldReturnFutureDate_WhenTokenIsValid() {
     String token = jwtUtil.generateToken(user);
-
     Date expiration = jwtUtil.extractExpiration(token);
 
     assertNotNull(expiration);
@@ -67,7 +71,6 @@ class JwtUtilTest {
   @Test
   void validateToken_ShouldReturnTrue_WhenTokenIsValid() {
     String token = jwtUtil.generateToken(user);
-
     Boolean isValid = jwtUtil.validateToken(token, user);
 
     assertTrue(isValid);
@@ -82,7 +85,6 @@ class JwtUtilTest {
             .email("different@example.com")
             .password("encodedPassword")
             .build();
-
     Boolean isValid = jwtUtil.validateToken(token, differentUser);
 
     assertFalse(isValid);
@@ -91,7 +93,6 @@ class JwtUtilTest {
   @Test
   void isTokenExpired_ShouldReturnFalse_WhenTokenIsNotExpired() {
     String token = jwtUtil.generateToken(user);
-
     Boolean isExpired = jwtUtil.isTokenExpired(token);
 
     assertFalse(isExpired);
@@ -100,7 +101,6 @@ class JwtUtilTest {
   @Test
   void extractClaim_ShouldReturnCorrectClaim() {
     String token = jwtUtil.generateToken(user);
-
     String subject = jwtUtil.extractClaim(token, claims -> claims.getSubject());
 
     assertEquals("testuser", subject);

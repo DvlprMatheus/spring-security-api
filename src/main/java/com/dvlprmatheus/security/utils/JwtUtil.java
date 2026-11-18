@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class JwtUtil {
     Date expirationDate = new Date(now.getTime() + jwtProperties.getExpiration());
 
     return Jwts.builder()
+        .id(UUID.randomUUID().toString())
         .claims(claims)
         .subject(subject)
         .issuedAt(now)

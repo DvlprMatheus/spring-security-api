@@ -12,6 +12,7 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+    open-in-view: true
   flyway:
     enabled: true
     url: ${POSTGRES_URL:jdbc:postgresql://postgres:5432/spring-security-db}

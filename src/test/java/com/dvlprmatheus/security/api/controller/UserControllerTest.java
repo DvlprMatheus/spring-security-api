@@ -1,7 +1,8 @@
 package com.dvlprmatheus.security.api.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dvlprmatheus.security.entity.User;
 import org.junit.jupiter.api.AfterEach;
