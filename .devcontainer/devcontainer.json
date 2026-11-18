@@ -13,7 +13,7 @@
 			"extensions": [
 				"vscjava.vscode-java-pack",
 				"VMware.vscode-boot-dev-pack",
-				"dbaeumer.vscode-eslint"
+				"redhat.vscode-yaml"
 			]
 		}
 	}
