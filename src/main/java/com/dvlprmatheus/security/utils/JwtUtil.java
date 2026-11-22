@@ -2,6 +2,7 @@ package com.dvlprmatheus.security.utils;
 
 import com.dvlprmatheus.security.config.jwt.JwtProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -38,7 +39,6 @@ public class JwtUtil {
   private String createToken(Map<String, Object> claims, String subject) {
     Date now = new Date();
     Date expirationDate = new Date(now.getTime() + jwtProperties.getExpiration());
-
     return Jwts.builder()
         .id(UUID.randomUUID().toString())
         .claims(claims)
@@ -50,14 +50,7 @@ public class JwtUtil {
   }
 
   public String extractUsername(String token) {
-    try {
-      String username = extractClaim(token, Claims::getSubject);
-      log.debug("Extracted username from token: {}", username);
-      return username;
-    } catch (Exception e) {
-      log.error("Error extracting username from token: {}", e.getMessage());
-      throw e;
-    }
+    return extractClaim(token, Claims::getSubject);
   }
 
   public Date extractExpiration(String token) {
@@ -65,41 +58,33 @@ public class JwtUtil {
   }
 
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-    final Claims claims = extractAllClaims(token);
+    Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
 
   private Claims extractAllClaims(String token) {
-    try {
-      return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
-    } catch (Exception e) {
-      log.error("Error parsing JWT token: {}", e.getMessage());
-      throw e;
-    }
+    return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
   }
 
-  public Boolean isTokenExpired(String token) {
-    try {
-      Date expiration = extractExpiration(token);
-      boolean expired = expiration.before(new Date());
-      if (expired) {
-        log.debug("Token is expired");
-      }
-      return expired;
-    } catch (Exception e) {
-      log.error("Error checking token expiration: {}", e.getMessage());
-      return true;
-    }
+  public boolean isTokenExpired(String token) {
+    Date expiration = extractExpiration(token);
+    return expiration == null || !expiration.after(new Date());
   }
 
-  public Boolean validateToken(String token, UserDetails userDetails) {
+  public boolean validateToken(String token, UserDetails userDetails) {
     try {
-      final String username = extractUsername(token);
-      boolean isValid = username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-      log.debug("Token validation result for user {}: {}", username, isValid);
+      Claims claims = extractAllClaims(token);
+      String username = claims.getSubject();
+      Date expiration = claims.getExpiration();
+      boolean isValid =
+          username != null
+              && username.equals(userDetails.getUsername())
+              && expiration != null
+              && expiration.after(new Date());
+      log.debug("Token validation result for user {}: {}", userDetails.getUsername(), isValid);
       return isValid;
-    } catch (Exception e) {
-      log.warn("Token validation failed: {}", e.getMessage());
+    } catch (JwtException | IllegalArgumentException e) {
+      log.warn("JWT validation failed: {}", e.getMessage());
       return false;
     }
   }
