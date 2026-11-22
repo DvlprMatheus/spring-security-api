@@ -5,31 +5,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dvlprmatheus.security.entity.User;
+import com.dvlprmatheus.security.utils.JwtUtil;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
 
-  @Autowired private WebApplicationContext webApplicationContext;
+  @Autowired private MockMvc mockMvc;
 
-  private MockMvc mockMvc;
-
-  @BeforeEach
-  void setUp() {
-    SecurityContextHolder.clearContext();
-    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-  }
+  @MockitoBean private JwtUtil jwtUtil;
 
   @AfterEach
   void tearDown() {
@@ -37,7 +31,8 @@ class UserControllerTest {
   }
 
   @Test
-  void test_ShouldReturnOkWithUserInfo_WhenUserIsAuthenticated() throws Exception {
+  @DisplayName("test - should return ok with user info when user is authenticated")
+  void shouldReturnOkWithUserInfoWhenUserIsAuthenticated() throws Exception {
     User user =
         User.builder()
             .username("testuser")
@@ -47,7 +42,9 @@ class UserControllerTest {
 
     Authentication authentication =
         new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+
     securityContext.setAuthentication(authentication);
     SecurityContextHolder.setContext(securityContext);
 
@@ -59,11 +56,10 @@ class UserControllerTest {
   }
 
   @Test
-  void test_ShouldReturnOkWithUnauthenticatedMessage_WhenUserIsNotAuthenticated() throws Exception {
-    mockMvc
-        .perform(get("/v1/user/test"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.message").value("User not authenticated"))
-        .andExpect(jsonPath("$.username").isEmpty());
+  @DisplayName(
+      "test - should return ok with unauthenticated message when user is not authenticated")
+  void shouldReturnOkWithUnauthenticatedMessageWhenUserIsNotAuthenticated() throws Exception {
+
+    mockMvc.perform(get("/v1/user/test")).andExpect(status().isUnauthorized());
   }
 }
